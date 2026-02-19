@@ -4,9 +4,10 @@
 
 import { icons } from './icons.js';
 import { alerts } from './data.js';
+import { getAuthUser } from './auth.js';
 
 const NAV_ITEMS = [
-    { label: 'Overview', icon: 'dashboard', path: '/' },
+    { label: 'Overview', icon: 'dashboard', path: '/dashboard' },
     { label: 'Subscriptions', icon: 'layers', path: '/subscriptions' },
     { label: 'Alerts', icon: 'bell', path: '/alerts', badge: alerts.length },
     { label: 'Renewals', icon: 'calendar', path: '/renewals' },
@@ -42,9 +43,9 @@ export function renderLayout(app) {
       </nav>
       <div class="sidebar-footer">
         <div class="sidebar-user">
-          <div class="sidebar-avatar">JD</div>
+          <div class="sidebar-avatar">${getAuthUser()?.name?.slice(0, 2).toUpperCase() || 'JD'}</div>
           <div class="sidebar-user-info">
-            <div class="sidebar-user-name">Jordan Davis</div>
+            <div class="sidebar-user-name">${getAuthUser()?.name || 'Jordan Davis'}</div>
             <div class="sidebar-user-role">Finance Lead</div>
           </div>
         </div>
