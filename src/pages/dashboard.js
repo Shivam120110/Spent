@@ -6,6 +6,8 @@ import { metrics, monthlySpend, alerts, subscriptions, formatCurrency, getToolCo
 import { icons } from '../icons.js';
 import { setPageTitle } from '../layout.js';
 
+let spendChartInstance = null;
+
 export function renderDashboard(container) {
     setPageTitle('Overview');
 
@@ -57,9 +59,10 @@ export function renderDashboard(container) {
               <div class="card-subtitle">Last 12 months trend</div>
             </div>
             <div class="filter-tabs">
-              <button class="filter-tab active">12M</button>
-              <button class="filter-tab">6M</button>
-              <button class="filter-tab">3M</button>
+              <button class="filter-tab" data-period="12">12M</button>
+              <button class="filter-tab" data-period="6">6M</button>
+              <button class="filter-tab" data-period="3">3M</button>
+              <button class="filter-tab" data-period="1">1M</button>
             </div>
           </div>
           <div class="chart-container">
@@ -125,21 +128,61 @@ export function renderDashboard(container) {
     </div>
   `;
 
-    renderSpendChart();
+    renderSpendChart(12); // Default to 12 months
     renderTopSpendTable();
+    setupChartFilters();
 }
 
-function renderSpendChart() {
+function setupChartFilters() {
+  const filterTabs = document.querySelectorAll('.filter-tab[data-period]');
+  filterTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      // Update active state
+      filterTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      
+      // Update chart
+      const period = parseInt(tab.getAttribute('data-period'));
+      renderSpendChart(period);
+      
+      // Update subtitle
+      const subtitle = document.querySelector('.card-subtitle');
+      if (subtitle && tab.closest('.card')) {
+        if (period === 1) {
+          subtitle.textContent = 'Last month';
+        } else {
+          subtitle.textContent = `Last ${period} months trend`;
+        }
+      }
+    });
+  });
+  
+  // Set initial active state
+  const activeTab = document.querySelector('.filter-tab[data-period="12"]');
+  if (activeTab) activeTab.classList.add('active');
+}
+
+function renderSpendChart(months = 12) {
     const ctx = document.getElementById('spend-chart');
     if (!ctx) return;
 
-    new Chart(ctx, {
+    // Filter data based on selected period
+    const filteredData = months === 1 
+      ? monthlySpend.slice(-1)
+      : monthlySpend.slice(-months);
+
+    // Destroy existing chart if it exists
+    if (spendChartInstance) {
+      spendChartInstance.destroy();
+    }
+
+    spendChartInstance = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: monthlySpend.map(d => d.month),
+            labels: filteredData.map(d => d.month),
             datasets: [{
                 label: 'Monthly Spend',
-                data: monthlySpend.map(d => d.value),
+                data: filteredData.map(d => d.value),
                 borderColor: '#2DD4A8',
                 backgroundColor: 'rgba(45, 212, 168, 0.05)',
                 fill: true,

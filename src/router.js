@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════
 
 import { isAuthenticated } from './auth.js';
-import { renderLayout } from './layout.js';
+import { renderLayout, setupGlobalSearch } from './layout.js';
 import { renderLanding } from './pages/landing.js';
 import { renderLogin } from './pages/login.js';
 import { renderSignup } from './pages/signup.js';
@@ -74,6 +74,7 @@ export class Router {
 
     // App routes: render layout + page
     renderLayout(this.app);
+    setupGlobalSearch(); // Setup search after layout is rendered
     const mainContent = document.getElementById('main-content');
     if (mainContent && handler) {
       mainContent.innerHTML = '';

@@ -5,6 +5,7 @@
 import { integrations } from '../data.js';
 import { icons } from '../icons.js';
 import { setPageTitle } from '../layout.js';
+import { getAuthUser, clearAuth } from '../auth.js';
 
 export function renderSettings(container) {
     setPageTitle('Settings');
@@ -95,6 +96,30 @@ export function renderSettings(container) {
         </div>
       </div>
 
+      <!-- Profile -->
+      <div style="margin-bottom: var(--space-6);">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Profile</div>
+            <div class="section-description">Your account information</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <div style="display: flex; align-items: center; gap: var(--space-4);">
+                <div class="sidebar-avatar" style="width: 48px; height: 48px; font-size: var(--text-md);">${getAuthUser()?.name?.slice(0, 2).toUpperCase() || 'JD'}</div>
+                <div>
+                  <div style="font-size: var(--text-md); font-weight: var(--weight-semibold); color: var(--color-text-primary);">${getAuthUser()?.name || 'Jordan Davis'}</div>
+                  <div style="font-size: var(--text-sm); color: var(--color-text-tertiary); margin-top: 2px;">${getAuthUser()?.email || 'jordan@company.com'}</div>
+                  <div style="font-size: var(--text-xs); color: var(--color-text-muted); margin-top: 2px;">Finance Lead</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Account -->
       <div>
         <div class="section-header">
@@ -107,10 +132,10 @@ export function renderSettings(container) {
           <div class="card-body">
             <div style="display: flex; align-items: center; justify-content: space-between;">
               <div style="display: flex; align-items: center; gap: var(--space-4);">
-                <div class="sidebar-avatar" style="width: 40px; height: 40px; font-size: var(--text-sm);">JD</div>
+                <div class="sidebar-avatar" style="width: 40px; height: 40px; font-size: var(--text-sm);">${getAuthUser()?.name?.slice(0, 2).toUpperCase() || 'JD'}</div>
                 <div>
-                  <div style="font-size: var(--text-sm); font-weight: var(--weight-semibold); color: var(--color-text-primary);">Jordan Davis</div>
-                  <div style="font-size: var(--text-xs); color: var(--color-text-tertiary);">jordan@company.com · Finance Lead</div>
+                  <div style="font-size: var(--text-sm); font-weight: var(--weight-semibold); color: var(--color-text-primary);">${getAuthUser()?.name || 'Jordan Davis'}</div>
+                  <div style="font-size: var(--text-xs); color: var(--color-text-tertiary);">${getAuthUser()?.email || 'jordan@company.com'} · Finance Lead</div>
                 </div>
               </div>
               <div style="display: flex; gap: var(--space-3);">
@@ -121,6 +146,29 @@ export function renderSettings(container) {
           </div>
         </div>
       </div>
+
+      <!-- Logout -->
+      <div style="margin-top: var(--space-6);">
+        <div class="card">
+          <div class="card-body">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <div>
+                <div style="font-size: var(--text-sm); font-weight: var(--weight-semibold); color: var(--color-text-primary);">Sign out</div>
+                <div style="font-size: var(--text-xs); color: var(--color-text-tertiary); margin-top: 2px;">Sign out of your account</div>
+              </div>
+              <button class="btn btn-danger" id="logout-btn">Log out</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   `;
+
+  // Logout handler
+  document.getElementById('logout-btn')?.addEventListener('click', () => {
+    if (confirm('Are you sure you want to log out?')) {
+      clearAuth();
+      window.location.hash = '#/';
+    }
+  });
 }

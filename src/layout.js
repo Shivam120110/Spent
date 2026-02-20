@@ -78,3 +78,107 @@ export function setPageTitle(title) {
     const el = document.getElementById('page-title');
     if (el) el.textContent = title;
 }
+
+// Setup global search functionality
+export function setupGlobalSearch() {
+    const searchInput = document.getElementById('global-search');
+    if (!searchInput) return;
+
+    // Store original search value for clearing
+    let searchTimeout = null;
+
+    searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.trim().toLowerCase();
+        
+        // Clear previous timeout
+        if (searchTimeout) clearTimeout(searchTimeout);
+        
+        // Debounce search
+        searchTimeout = setTimeout(() => {
+            performGlobalSearch(query);
+        }, 300);
+    });
+
+    // Handle Enter key
+    searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const query = e.target.value.trim().toLowerCase();
+            performGlobalSearch(query);
+        }
+    });
+}
+
+function performGlobalSearch(query) {
+    if (!query) {
+        // Clear search - refresh current page
+        const hash = window.location.hash || '#/dashboard';
+        window.location.hash = hash;
+        return;
+    }
+
+    // Get current route
+    const currentRoute = (window.location.hash || '#/dashboard').replace('#', '');
+    
+    // If on dashboard, filter the table
+    if (currentRoute === '/dashboard') {
+        filterDashboardTable(query);
+    } else if (currentRoute === '/subscriptions') {
+        // Trigger subscriptions page search
+        const subSearchInput = document.getElementById('sub-search');
+        if (subSearchInput) {
+            subSearchInput.value = query;
+            subSearchInput.dispatchEvent(new Event('input'));
+        }
+    } else {
+        // Navigate to subscriptions page with search
+        window.location.hash = '#/subscriptions';
+        setTimeout(() => {
+            const subSearchInput = document.getElementById('sub-search');
+            if (subSearchInput) {
+                subSearchInput.value = query;
+                subSearchInput.dispatchEvent(new Event('input'));
+            }
+        }, 100);
+    }
+}
+
+function filterDashboardTable(query) {
+    const tbody = document.getElementById('top-spend-table');
+    if (!tbody) return;
+
+    const rows = Array.from(tbody.querySelectorAll('tr')).filter(row => !row.classList.contains('no-results-message'));
+    let visibleCount = 0;
+
+    // Remove existing no-results message
+    const existingNoResults = tbody.querySelector('.no-results-message');
+    if (existingNoResults) existingNoResults.remove();
+
+    rows.forEach(row => {
+        const toolName = row.querySelector('.tool-name')?.textContent?.toLowerCase() || '';
+        const category = row.querySelector('td:nth-child(2)')?.textContent?.toLowerCase() || '';
+        
+        if (toolName.includes(query) || category.includes(query)) {
+            row.style.display = '';
+            visibleCount++;
+        } else {
+            row.style.display = 'none';
+        }
+    });
+
+    // Show message if no results
+    if (visibleCount === 0 && rows.length > 0) {
+        const noResultsRow = document.createElement('tr');
+        noResultsRow.className = 'no-results-message';
+        noResultsRow.innerHTML = `
+            <td colspan="5" style="text-align: center; padding: var(--space-8);">
+                <div class="empty-state">
+                    <div class="empty-state-icon">${icons.search}</div>
+                    <div class="empty-state-title">No tools found</div>
+                    <div class="empty-state-text">No tools match "${query}"</div>
+                </div>
+            </td>
+        `;
+        tbody.appendChild(noResultsRow);
+    }
+}
