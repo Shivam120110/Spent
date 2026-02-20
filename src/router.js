@@ -12,6 +12,8 @@ import { renderSubscriptions } from './pages/subscriptions.js';
 import { renderAlerts } from './pages/alerts.js';
 import { renderRenewals } from './pages/renewals.js';
 import { renderSettings } from './pages/settings.js';
+import { renderToolDetail } from './pages/tool-detail.js';
+import { renderUserDetail } from './pages/user-detail.js';
 import { showOnboarding } from './components/onboarding.js';
 
 const MARKETING_ROUTES = ['/', '/login', '/signup'];
@@ -61,6 +63,39 @@ export class Router {
     // Redirect authenticated users from login/signup to dashboard
     if ((route === '/login' || route === '/signup') && isAuthenticated()) {
       window.location.hash = '#/dashboard';
+      return;
+    }
+
+    // Handle dynamic routes (tool/:id, user/:id)
+    if (route.startsWith('/tool/')) {
+      const toolId = route.split('/tool/')[1];
+      if (!isAuthenticated()) {
+        window.location.hash = '#/login';
+        return;
+      }
+      renderLayout(this.app);
+      setupGlobalSearch();
+      const mainContent = document.getElementById('main-content');
+      if (mainContent) {
+        mainContent.innerHTML = '';
+        renderToolDetail(mainContent, toolId);
+      }
+      return;
+    }
+
+    if (route.startsWith('/user/')) {
+      const userId = route.split('/user/')[1];
+      if (!isAuthenticated()) {
+        window.location.hash = '#/login';
+        return;
+      }
+      renderLayout(this.app);
+      setupGlobalSearch();
+      const mainContent = document.getElementById('main-content');
+      if (mainContent) {
+        mainContent.innerHTML = '';
+        renderUserDetail(mainContent, userId);
+      }
       return;
     }
 

@@ -234,3 +234,65 @@ export const integrations = [
     { name: 'Stripe', desc: 'Subscription billing and charges', connected: true, color: '#635BFF' },
     { name: 'AWS', desc: 'Cloud infrastructure spend tracking', connected: false, color: '#FF9900' },
 ];
+
+// User data with tool assignments
+export const users = [
+    { id: 1, name: 'Alex Chen', email: 'alex.chen@company.com', department: 'Engineering', role: 'Senior Engineer', tools: [1, 5, 6, 7, 13, 14, 19] },
+    { id: 2, name: 'Sarah Johnson', email: 'sarah.johnson@company.com', department: 'Design', role: 'Design Lead', tools: [2, 3, 18] },
+    { id: 3, name: 'Michael Rodriguez', email: 'michael.rodriguez@company.com', department: 'Sales', role: 'Sales Manager', tools: [1, 4, 9, 6] },
+    { id: 4, name: 'Emily Davis', email: 'emily.davis@company.com', department: 'Product', role: 'Product Manager', tools: [1, 3, 7, 13, 16] },
+    { id: 5, name: 'David Kim', email: 'david.kim@company.com', department: 'Engineering', role: 'DevOps Engineer', tools: [1, 5, 6, 10, 11, 14, 19] },
+    { id: 6, name: 'Jessica Martinez', email: 'jessica.martinez@company.com', department: 'Support', role: 'Support Lead', tools: [1, 6, 12] },
+    { id: 7, name: 'Ryan Thompson', email: 'ryan.thompson@company.com', department: 'Finance', role: 'Finance Analyst', tools: [1, 6, 15, 19] },
+    { id: 8, name: 'Lisa Wang', email: 'lisa.wang@company.com', department: 'Operations', role: 'Operations Manager', tools: [1, 3, 6, 17, 19] },
+    { id: 9, name: 'James Wilson', email: 'james.wilson@company.com', department: 'Engineering', role: 'Engineering Manager', tools: [1, 5, 6, 7, 10, 13, 19] },
+    { id: 10, name: 'Amanda Brown', email: 'amanda.brown@company.com', department: 'Design', role: 'UI Designer', tools: [1, 2, 3, 18] },
+    { id: 11, name: 'Robert Taylor', email: 'robert.taylor@company.com', department: 'Sales', role: 'Account Executive', tools: [1, 4, 6, 8, 9] },
+    { id: 12, name: 'Maria Garcia', email: 'maria.garcia@company.com', department: 'Legal', role: 'Legal Counsel', tools: [1, 6, 20, 19] },
+    { id: 13, name: 'Kevin Lee', email: 'kevin.lee@company.com', department: 'Engineering', role: 'Backend Engineer', tools: [1, 5, 6, 10, 11, 13, 19] },
+    { id: 14, name: 'Nicole Anderson', email: 'nicole.anderson@company.com', department: 'Product', role: 'Product Designer', tools: [1, 2, 3, 7, 13, 16] },
+    { id: 15, name: 'Christopher Moore', email: 'christopher.moore@company.com', department: 'IT', role: 'IT Administrator', tools: [1, 6, 8, 19] },
+    { id: 16, name: 'Shivam Kumar', email: 'shivam.kumar.som.2428@company.com', department: 'Finance', role: 'Finance Lead', tools: [1, 4, 6, 9, 15, 19] },
+    { id: 17, name: 'Jennifer White', email: 'jennifer.white@company.com', department: 'Support', role: 'Customer Success', tools: [1, 6, 12, 17] },
+    { id: 18, name: 'Daniel Harris', email: 'daniel.harris@company.com', department: 'Engineering', role: 'Frontend Engineer', tools: [1, 2, 5, 6, 13, 14, 19] },
+    { id: 19, name: 'Rachel Green', email: 'rachel.green@company.com', department: 'Marketing', role: 'Marketing Manager', tools: [1, 3, 6, 16] },
+    { id: 20, name: 'Thomas Clark', email: 'thomas.clark@company.com', department: 'Engineering', role: 'QA Engineer', tools: [1, 5, 6, 7, 13, 19] },
+];
+
+// Helper functions
+export function getUsersByTool(toolId) {
+    return users.filter(user => user.tools.includes(toolId));
+}
+
+export function getToolsByUser(userId) {
+    const user = users.find(u => u.id === userId);
+    if (!user) return [];
+    return subscriptions.filter(sub => user.tools.includes(sub.id));
+}
+
+export function getUserById(userId) {
+    return users.find(u => u.id === userId);
+}
+
+export function getToolById(toolId) {
+    return subscriptions.find(s => s.id === toolId);
+}
+
+export function searchUsers(query) {
+    const q = query.toLowerCase();
+    return users.filter(user => 
+        user.name.toLowerCase().includes(q) || 
+        user.email.toLowerCase().includes(q) ||
+        user.department.toLowerCase().includes(q) ||
+        user.role.toLowerCase().includes(q)
+    );
+}
+
+export function searchTools(query) {
+    const q = query.toLowerCase();
+    return subscriptions.filter(tool => 
+        tool.name.toLowerCase().includes(q) || 
+        tool.category.toLowerCase().includes(q) ||
+        tool.owner.toLowerCase().includes(q)
+    );
+}

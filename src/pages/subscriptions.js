@@ -137,7 +137,9 @@ function renderTable() {
             <div class="tool-icon" style="background: ${getToolColor(sub.name)}20; color: ${getToolColor(sub.name)};">
               ${getToolInitials(sub.name)}
             </div>
-            <span class="tool-name">${sub.name}</span>
+            <a href="#/tool/${sub.id}" class="tool-name" style="color: var(--color-accent); text-decoration: none; cursor: pointer;">
+              ${sub.name}
+            </a>
           </div>
         </td>
         <td>${sub.category}</td>

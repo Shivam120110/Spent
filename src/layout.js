@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════
 
 import { icons } from './icons.js';
-import { alerts } from './data.js';
+import { alerts, searchTools, searchUsers } from './data.js';
 import { getAuthUser } from './auth.js';
 
 const NAV_ITEMS = [
@@ -117,7 +117,23 @@ function performGlobalSearch(query) {
         return;
     }
 
-    // Get current route
+    // Search for tools first (exact match)
+    const toolResults = searchTools(query);
+    if (toolResults.length > 0) {
+        // Navigate to first matching tool detail page
+        window.location.hash = `#/tool/${toolResults[0].id}`;
+        return;
+    }
+
+    // Search for users
+    const userResults = searchUsers(query);
+    if (userResults.length > 0) {
+        // Navigate to first matching user detail page
+        window.location.hash = `#/user/${userResults[0].id}`;
+        return;
+    }
+
+    // If no exact matches, fall back to filtering current page
     const currentRoute = (window.location.hash || '#/dashboard').replace('#', '');
     
     // If on dashboard, filter the table
