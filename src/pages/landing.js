@@ -14,7 +14,7 @@ export function renderLanding(container) {
         </div>
         <div class="landing-nav-links">
           <a href="#/login" class="landing-nav-link">Log in</a>
-          <a href="#/signup" class="landing-btn landing-btn-primary">Get started</a>
+          <a href="#/signup" class="landing-btn landing-btn-primary" style="white-space: nowrap;">Get started</a>
         </div>
       </nav>
 
@@ -103,10 +103,16 @@ export function renderLanding(container) {
         </blockquote>
       </section>
 
+      <section class="landing-stats">
+        <div class="landing-stat"><span class="landing-stat-value">$350K+</span> <span class="landing-stat-label">Tracked annually</span></div>
+        <div class="landing-stat"><span class="landing-stat-value">20+</span> <span class="landing-stat-label">Tools supported</span></div>
+        <div class="landing-stat"><span class="landing-stat-value">30%</span> <span class="landing-stat-label">Avg. savings</span></div>
+      </section>
+
       <section class="landing-cta">
         <h2 class="landing-cta-title">Ready to take control?</h2>
         <p class="landing-cta-subtitle">Free 14-day trial. No credit card required.</p>
-        <a href="#/signup" class="landing-btn landing-btn-primary landing-btn-lg">Get started free</a>
+        <a href="#/signup" class="landing-btn landing-btn-primary landing-btn-lg" style="white-space: nowrap;">Get started free</a>
       </section>
 
       <footer class="landing-footer">

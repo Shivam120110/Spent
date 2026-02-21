@@ -12,12 +12,13 @@ import { renderSubscriptions } from './pages/subscriptions.js';
 import { renderAlerts } from './pages/alerts.js';
 import { renderRenewals } from './pages/renewals.js';
 import { renderSettings } from './pages/settings.js';
+import { renderProfile } from './pages/profile.js';
 import { renderToolDetail } from './pages/tool-detail.js';
 import { renderUserDetail } from './pages/user-detail.js';
 import { showOnboarding } from './components/onboarding.js';
 
 const MARKETING_ROUTES = ['/', '/login', '/signup'];
-const APP_ROUTES = ['/dashboard', '/subscriptions', '/alerts', '/renewals', '/settings'];
+const APP_ROUTES = ['/dashboard', '/subscriptions', '/alerts', '/renewals', '/settings', '/profile'];
 
 const ROUTES = {
   '/': renderLanding,
@@ -28,6 +29,7 @@ const ROUTES = {
   '/alerts': renderAlerts,
   '/renewals': renderRenewals,
   '/settings': renderSettings,
+  '/profile': renderProfile,
 };
 
 export class Router {
