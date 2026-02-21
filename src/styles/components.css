@@ -814,7 +814,8 @@
 .search-wrap {
     position: relative;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
     gap: var(--space-2);
 }
 
